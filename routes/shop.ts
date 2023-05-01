@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 const routerApp = express.Router();
-const adminData = require('./admin');
+import {getProducts} from "../controllers/products";
 
 // routerApp.use('/', (req, res, next) => {
 //     res.send('<h1>Hello from Express!</h1>');
@@ -14,11 +14,11 @@ const adminData = require('./admin');
 //     res.sendFile(path.join(__dirname, '..', 'views', 'shop.html'));
 // });
 
-routerApp.get('/', (req, res, next) => {
-    const products = adminData.products;
-    res.render('shop', {prods: products, pageTitle: 'Shop', path: '/'});
-});
+// routerApp.get('/', (req, res, next) => {
+//     res.render('shop', {prods: products, pageTitle: 'Shop', path: '/'});
+// });
 
+routerApp.get('/', getProducts);
 
 
 export {routerApp}
