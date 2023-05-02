@@ -1,24 +1,25 @@
-import express from "express";
 import path from "path";
-const routerApp = express.Router();
-import {getProducts} from "../controllers/products";
 
-// routerApp.use('/', (req, res, next) => {
-//     res.send('<h1>Hello from Express!</h1>');
-// });
-// routerApp.get('/', (req, res, next) => {
-//     res.send('<h1>Hello from Express!</h1>');
-// });
+import express from "express";
 
-// routerApp.get('/', (req, res, next) => {
-//     res.sendFile(path.join(__dirname, '..', 'views', 'shop.html'));
-// });
+import {getIndex, getProducts, getProduct, getCheckout, postCartDeleteProduct , postCart, getCart, getOrders} from "../controllers/shop";
 
-// routerApp.get('/', (req, res, next) => {
-//     res.render('shop', {prods: products, pageTitle: 'Shop', path: '/'});
-// });
+const router = express.Router();
 
-routerApp.get('/', getProducts);
+router.get('/', getIndex);
 
+router.get('/products', getProducts);
 
-export {routerApp}
+router.get('/products/:productId', getProduct);
+
+router.get('/cart', getCart);
+
+router.post('/cart', postCart);
+
+router.post('/cart-delete-item', postCartDeleteProduct);
+
+router.get('/orders', getOrders);
+
+router.get('/checkout', getCheckout);
+
+module.exports = router;

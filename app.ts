@@ -2,9 +2,10 @@ import * as http from "http";
 import {requestHandler} from "./nodejs_routes";
 import express from "express";
 import * as bodyParser from "body-parser";
-import {routerAdmin} from "./routes/admin";
-import {routerApp} from "./routes/shop";
+import {routerAdmin} from "./routes/_admin";
+import {routerApp} from "./routes/_shop";
 import path from "path";
+import {get404} from "./controllers/error";
 //import {engine} from 'express-handlebars';
 
 const app = express();
@@ -31,9 +32,7 @@ app.use(routerApp);
 //     res.status(404).sendFile(path.join(__dirname, 'views', '404.html'))
 // })
 
-app.use((req, res, next) => {
-    res.status(404).sendFile(path.join(__dirname, 'views', '404.html'))
-})
+app.use(get404)
 
 app.listen(3000)
 
