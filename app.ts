@@ -7,6 +7,7 @@ import {router} from "./routes/shop"
 import path from "path";
 import {get404} from "./controllers/error";
 //import {engine} from 'express-handlebars';
+// import {db} from "./util/database";
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -15,6 +16,8 @@ app.set('view engine', 'ejs');
 
 //app.set('view engine', 'pug');
 //app.set('views', 'views'); //DEFAULT
+
+// db.execute("SELECT * FROM products")
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')))
