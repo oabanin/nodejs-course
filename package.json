@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "./node_modules/.bin/nodemon ./app.ts"
+    "dev": "./node_modules/.bin/nodemon app.ts"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +20,7 @@
     "express": "^4.18.2",
     "express-handlebars": "^7.0.7",
     "mysql2": "^3.2.4",
-    "pug": "^3.0.2"
+    "pug": "^3.0.2",
+    "sequelize": "^6.31.1"
   }
 }

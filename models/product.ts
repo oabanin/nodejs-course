@@ -1,41 +1,28 @@
-import * as fs from "fs";
-import path from "path";
+import {INTEGER, STRING, DOUBLE} from "sequelize"
+import {sequelize} from "../util/database";
 
-const p = path.join(path.dirname(require.main?.filename as string), 'data', 'products.json');
-import {Cart} from "./cart";
+const Product = sequelize.define('product', {
+    id: {
+        type: INTEGER, //
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true
+    },
+    // title: STRING, //NOT varchar
 
-import {db} from "../util/database";
-
-export class Product {
-    id: string | null;
-    title: string;
-    imageUrl: string;
-    description: string;
-    price: string;
-
-    constructor(id: string | null, title: string, imageUrl: string, description: string, price: string) {
-        this.id = id;
-        this.title = title;
-        this.imageUrl = imageUrl;
-        this.description = description;
-        this.price = price;
+    title: STRING, //NOT varchar
+    price: {
+        type: DOUBLE,
+        allowNull: false
+    },
+    imageUrl: {
+        type: STRING,
+        allowNull: false
+    },
+    description: {
+        type: STRING,
+        allowNull: false
     }
+});
 
-    save() {
-        return db.execute(
-            'INSERT INTO products (title, price, imageUrl, description) VALUES (?, ?, ?, ?)',
-            [this.title, this.price, this.imageUrl, this.description]
-        );
-    }
-
-    static deleteById(id: string) {
-    }
-
-    static fetchAll() {
-        return db.execute('SELECT * FROM products');
-    }
-
-    static findById(id: string) {
-        return db.execute('SELECT * FROM products WHERE products.id = ?', [id]);
-    }
-};
+export {Product}

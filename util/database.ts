@@ -1,13 +1,12 @@
-import mysql from "mysql2";
+import {Sequelize} from "sequelize"
+import {Product} from "../models/product";
 
-const pool = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    database: "node-complete",
-    password: "123123",
-    port:3306
-})
+const sequelize = new Sequelize('nodejs-complete', 'root', '12345678', {
+    dialect: 'mysql',
+    host: 'localhost'
+});
+// Product.sync();
 
-const db = pool.promise();
 
-export {db};
+
+export {sequelize}

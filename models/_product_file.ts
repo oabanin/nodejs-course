@@ -2,7 +2,7 @@ import * as fs from "fs";
 import path from "path";
 
 const p = path.join(path.dirname(require.main?.filename as string), 'data', 'products.json');
-import {Cart} from "./cart";
+import {_old_cart} from "./_old_cart";
 
 const getProductsFromFile = (cb: (products: any) => void) => {
     fs.readFile(p, (err, fileContent: any) => {
@@ -56,7 +56,7 @@ export class Product {
             const updatedProducts = products.filter((prod: any) => prod.id !== id);
             fs.writeFile(p, JSON.stringify(updatedProducts), err => {
                 if (!err) {
-                    Cart.deleteProduct(id, product.price);
+                    _old_cart.deleteProduct(id, product.price);
                 }
             });
         });

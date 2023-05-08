@@ -1,7 +1,7 @@
 import {Product} from "../models/product";
-import {Request, Response} from "express";
+import e from "express";
 
-const getAddProduct = (req: Request, res: Response) => {
+const getAddProduct = (req: any, res: any) => {
     res.render('admin/edit-product', {
         pageTitle: 'Add Product',
         path: '/admin/add-product',
@@ -9,66 +9,36 @@ const getAddProduct = (req: Request, res: Response) => {
     });
 };
 
-const postAddProduct = (req: Request, res: Response) => {
+const postAddProduct = (req: any, res: any) => {
     const title = req.body.title;
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
-    const product = new Product(null, title, imageUrl, description, price);
-    product.save();
-    res.redirect('/');
+    Product.create({title, imageUrl, price, description})
+
 };
 
-const getEditProduct = (req: Request, res: Response) => {
+const getEditProduct = (req: any, res: any) => {
     const editMode = req.query.edit;
     if (!editMode) {
         return res.redirect('/');
     }
     const prodId = req.params.productId;
-    Product.findById(prodId, product => {
-        if (!product) {
-            return res.redirect('/');
-        }
-        res.render('admin/edit-product', {
-            pageTitle: 'Edit Product',
-            path: '/admin/edit-product',
-            editing: editMode,
-            product: product
-        });
-    });
+
 };
 
-const postEditProduct = (req: Request, res: Response) => {
-    const prodId = req.body.productId;
-    const updatedTitle = req.body.title;
-    const updatedPrice = req.body.price;
-    const updatedImageUrl = req.body.imageUrl;
-    const updatedDesc = req.body.description;
-    const updatedProduct = new Product(
-        prodId,
-        updatedTitle,
-        updatedImageUrl,
-        updatedDesc,
-        updatedPrice
-    );
-    updatedProduct.save();
+const postEditProduct = (req: any, res: any) => {
+
     res.redirect('/admin/products');
 };
 
-const getProducts = (req: Request, res: Response) => {
-    Product.fetchAll(products => {
-        res.render('admin/products', {
-            prods: products,
-            pageTitle: 'Admin Products',
-            path: '/admin/products'
-        });
-    });
+const getProducts = (req: any, res: any) => {
+
 };
 
-const postDeleteProduct = (req: Request, res: Response) => {
+const postDeleteProduct = (req: any, res: any) => {
     const prodId = req.body.productId;
-    Product.deleteById(prodId);
     res.redirect('/admin/products');
 };
 
-export {postDeleteProduct, postEditProduct, getEditProduct, postAddProduct, getProducts, getAddProduct}
+export {getProducts, getAddProduct, postAddProduct, postDeleteProduct, postEditProduct, getEditProduct}
