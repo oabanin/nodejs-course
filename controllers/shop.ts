@@ -1,5 +1,6 @@
 import {Product} from "../models/product";
 import {Cart} from "../models/cart";
+import {_old_product} from "../models/ownmodel/_old_product";
 
 const getProducts = (req: any, res: any) => {
     Product.findAll().then(products => {
@@ -13,7 +14,24 @@ const getProducts = (req: any, res: any) => {
 
 const getProduct = (req: any, res: any) => {
     const prodId = req.params.productId;
-    console.log('dsd')
+    Product.findAll({
+        where: {
+            id: prodId
+        }
+    }).then((products: any[]) => {
+        res.render('shop/product-detail', {
+            product: products[0],
+            pageTitle: products[0].title,
+            path: '/products'
+        });
+    }).catch(console.log)
+    // Product.findByPk(prodId).then((product: any) => {
+    //     res.render('shop/product-detail', {
+    //         product: product,
+    //         pageTitle: product.title,
+    //         path: '/products'
+    //     });
+    // });
 };
 
 const getIndex = (req: any, res: any) => {

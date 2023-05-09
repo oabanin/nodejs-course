@@ -1,5 +1,6 @@
 import {Product} from "../models/product";
 import e from "express";
+import {Model} from "sequelize";
 
 const getAddProduct = (req: any, res: any) => {
     res.render('admin/edit-product', {
@@ -25,19 +26,52 @@ const getEditProduct = (req: any, res: any) => {
     }
     const prodId = req.params.productId;
 
+    Product.findByPk(prodId).then((product: any) => {
+        if (!product) {
+            return res.redirect('/');
+        }
+        res.render('admin/edit-product', {
+            pageTitle: 'Edit Product',
+            path: '/admin/edit-product',
+            editing: editMode,
+            product: product
+        });
+    }).catch(console.log);
+
 };
 
-const postEditProduct = (req: any, res: any) => {
+const postEditProduct = async (req: any, res: any) => {
+
+    const prodId = req.body.productId;
+    const updatedTitle = req.body.title;
+    const updatedPrice = req.body.price;
+    const updatedImageUrl = req.body.imageUrl;
+    const updatedDesc = req.body.description;
+
+    const product = await Product.findByPk<any>(prodId);
+    product.title = updatedTitle;
+    product.price = updatedPrice;
+    product.imageUrl = updatedImageUrl;
+    product.description = updatedDesc;
+    await product.save();
 
     res.redirect('/admin/products');
 };
 
 const getProducts = (req: any, res: any) => {
-
+    Product.findAll().then((products: any) => {
+        res.render('admin/products', {
+            prods: products,
+            pageTitle: 'Admin Products',
+            path: '/admin/products'
+        });
+    }).catch(console.log)
 };
 
-const postDeleteProduct = (req: any, res: any) => {
+const postDeleteProduct = async (req: any, res: any) => {
     const prodId = req.body.productId;
+    const product = await Product.findByPk<Model<any, any>>(prodId);
+    await product?.destroy()
     res.redirect('/admin/products');
 };
 

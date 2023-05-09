@@ -1,5 +1,5 @@
-import {_old_product} from "../models/_old_product";
-import {_old_cart} from "../models/_old_cart";
+import {_old_product} from "../models/ownmodel/_old_product";
+import {_old_cart} from "../models/ownmodel/_old_cart";
 import {Request, Response} from "express";
 
 const getProducts = (req: Request, res: Response) => {

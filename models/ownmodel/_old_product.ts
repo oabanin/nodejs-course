@@ -4,7 +4,7 @@ import path from "path";
 const p = path.join(path.dirname(require.main?.filename as string), 'data', 'products.json');
 import {_old_cart} from "./_old_cart";
 
-import {db} from "../util/_old_database";
+import {db} from "../../util/_old_database";
 
 export class _old_product {
     id: string | null;
