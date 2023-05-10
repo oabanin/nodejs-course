@@ -1,6 +1,4 @@
 import {Product} from "../models/product";
-import {Cart} from "../models/cart";
-import {_old_product} from "../models/ownmodel/_old_product";
 
 const getProducts = (req: any, res: any) => {
     Product.findAll().then(products => {
@@ -44,14 +42,26 @@ const getIndex = (req: any, res: any) => {
     }).catch(console.log)
 };
 
-const getCart = (req: any, res: any) => {
+const getCart = async (req: any, res: any) => {
+    const cart = await req.user.getCart();
+    const products = await cart.getProducts();
+    res.render('shop/cart', {
+        path: '/cart',
+        pageTitle: 'Your Cart',
+        products: products
+    });
 
 };
 
-const postCart = (req: any, res: any) => {
+const postCart = async (req: any, res: any) => {
     const prodId = req.body.productId;
-    console.log('dsd')
-    res.redirect('/cart');
+    const cart = await req.user.getCart();
+    const productInCart = await cart.getProducts({where: {id: prodId}})?.[0];
+    const newQuantity = 1;
+    const product = await Product.findByPk(prodId);
+    cart.addProduct(product, {through: {quantity: newQuantity}})
+
+    res.redirect('/cart')
 };
 
 const postCartDeleteProduct = (req: any, res: any) => {

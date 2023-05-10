@@ -44,11 +44,12 @@ sequelize
     .sync()
     //.sync({force: true})
     .then(async (result) => {
-        const user = await User.findByPk(1);
+        const user = await User.findByPk<any>(1);
         if(!user)
         {
             await User.create({name: "Max", email: "test@test.com"});
         }
+        user.createCart();
         app.listen(3000);
     })
     .catch(console.log); //sync models to databates
