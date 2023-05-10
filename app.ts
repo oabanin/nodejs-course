@@ -9,6 +9,8 @@ import {router as shopRoutes} from "./routes/shop";
 import {router as adminRoutes} from "./routes/admin"
 import {Product} from "./models/product";
 import {User} from "./models/user";
+import {Cart} from "./models/cart";
+import {CartItem} from "./models/cart-item";
 
 const app = express();
 
@@ -33,10 +35,14 @@ app.use(get404);
 
 Product.belongsTo(User, {constraints: true, onDelete: "CASCADE"});
 User.hasMany(Product) //adds specials association methods
+User.hasOne(Cart)
+Cart.belongsTo(User)
+Cart.belongsToMany(Product, {through:CartItem})
+Product.belongsToMany(Cart, {through:CartItem})
 
 sequelize
     .sync()
-    // .sync({force: true})
+    //.sync({force: true})
     .then(async (result) => {
         const user = await User.findByPk(1);
         if(!user)

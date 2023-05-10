@@ -30,6 +30,9 @@ const getEditProduct = (req: any, res: any) => {
     }
     const prodId = req.params.productId;
 
+    //FOR 1 users
+    // req.user.getProducts({where:{id:prodId}});
+    //OR if for all users
     Product.findByPk(prodId).then((product: any) => {
         if (!product) {
             return res.redirect('/');
@@ -63,7 +66,9 @@ const postEditProduct = async (req: any, res: any) => {
 };
 
 const getProducts = (req: any, res: any) => {
-    Product.findAll().then((products: any) => {
+    //Product.findAll(). //If you do not take into account user
+    req.user.getProducts()
+        .then((products: any) => {
         res.render('admin/products', {
             prods: products,
             pageTitle: 'Admin Products',

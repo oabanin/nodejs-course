@@ -1,14 +1,14 @@
-import {INTEGER} from "sequelize"
+import {INTEGER, STRING, DOUBLE} from "sequelize"
 import {sequelize} from "../util/database";
 import {type} from "os";
 
-const Cart = sequelize.define('cart', {
+const CartItem = sequelize.define('cartItem', {
     id: {
         type: INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
-    }
+    },
+    quantity: INTEGER
 })
-
-export {Cart}
+export {CartItem}
