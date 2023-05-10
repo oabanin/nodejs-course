@@ -1,6 +1,6 @@
 import path from "path";
 import {sequelize} from "./util/database";
-import express from "express";
+import express, {Request} from "express";
 import * as bodyParser from "body-parser";
 
 import {get404} from "./controllers/error";
@@ -19,17 +19,30 @@ app.set('views', 'views');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+
+app.use(async (req, res, next) => {
+    // @ts-ignore
+    req.user = await User.findByPk(1);
+    next();
+})
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
 app.use(get404);
 
 Product.belongsTo(User, {constraints: true, onDelete: "CASCADE"});
-//OR
-// User.hasMany(Product)
-//Product.sync();
-sequelize.sync({force: true})
-    .then(result => {
+User.hasMany(Product) //adds specials association methods
+
+sequelize
+    .sync()
+    // .sync({force: true})
+    .then(async (result) => {
+        const user = await User.findByPk(1);
+        if(!user)
+        {
+            await User.create({name: "Max", email: "test@test.com"});
+        }
         app.listen(3000);
     })
     .catch(console.log); //sync models to databates

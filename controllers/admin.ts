@@ -15,7 +15,11 @@ const postAddProduct = (req: any, res: any) => {
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
-    Product.create({title, imageUrl, price, description})
+    req.user.createProduct({title, imageUrl, price, description}) //CREATE new assossicated product
+    //INSTEAD OF
+    // Product.create({title, imageUrl, price, description,
+    // userId:req.user.id
+    // })
 
 };
 
