@@ -11,6 +11,8 @@ import {Product} from "./models/product";
 import {User} from "./models/user";
 import {Cart} from "./models/cart";
 import {CartItem} from "./models/cart-item";
+import {OrderItem} from "./models/order-item";
+import {Order} from "./models/order";
 
 const app = express();
 
@@ -39,6 +41,9 @@ User.hasOne(Cart)
 Cart.belongsTo(User)
 Cart.belongsToMany(Product, {through:CartItem})
 Product.belongsToMany(Cart, {through:CartItem})
+Order.belongsTo(User);
+User.hasMany(Order);
+Order.belongsToMany(Product,{through:OrderItem});
 
 sequelize
     .sync()
@@ -49,7 +54,6 @@ sequelize
         {
             await User.create({name: "Max", email: "test@test.com"});
         }
-        user.createCart();
         app.listen(3000);
     })
     .catch(console.log); //sync models to databates
