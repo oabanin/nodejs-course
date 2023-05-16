@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 const routerApp = express.Router();
-import {getProducts} from "../controllers/old_shop";
+import {getProducts} from "../../controllers/oldFile/old_shop";
 
 // routerApp.use('/', (req, res, next) => {
 //     res.send('<h1>Hello from Express!</h1>');
