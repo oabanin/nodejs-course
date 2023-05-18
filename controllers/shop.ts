@@ -54,27 +54,33 @@ const postCartDeleteProduct = async (req: any, res: any) => {
     const prodId = req.body.productId;
     req.user
         .deleteItemFromCart(prodId)
-        .then((result:any) => {
+        .then((result: any) => {
             res.redirect('/cart');
         })
-        .catch((err:any) => console.log(err));
+        .catch((err: any) => console.log(err));
 };
 
 const postOrder = async (req: any, res: any) => {
-    // const cart = await req.user.getCart();
-    // const products = await cart.getProducts();
-    // const order = await req.user.createOrder();
-    // const orderWithProducts = order.addProducts(products.map((product: any) => ({...product, orderItem: {quantity: product.cartItem.quantity}})))
-    // res.redirect('/orders');
+    let fetchedCart;
+    req.user
+        .addOrder()
+        .then((result: any) => {
+            res.redirect('/orders');
+        })
+        .catch((err: any) => console.log(err));
 };
 
 const getOrders = (req: any, res: any) => {
-    // const orders =  req.user.getOrders();
-    // res.render('shop/orders', {
-    //     path: '/orders',
-    //     pageTitle: 'Your Orders',
-    //     orders,
-    // });
+    req.user
+        .getOrders()
+        .then((orders:any) => {
+            res.render('shop/orders', {
+                path: '/orders',
+                pageTitle: 'Your Orders',
+                orders: orders
+            });
+        })
+        .catch((err:any) => console.log(err));
 };
 
 const getCheckout = (req: any, res: any) => {

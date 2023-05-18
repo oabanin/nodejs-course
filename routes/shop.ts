@@ -19,10 +19,10 @@ router.post('/cart', postCart);
 
 router.post('/cart-delete-item', postCartDeleteProduct);
 
-router.get('/create-order', postOrder);
+router.post('/create-order', postOrder);
 
 router.get('/orders', getOrders);
 
-router.get('/checkout', getCheckout);
+// router.get('/checkout', getCheckout);
 
 export {router}
