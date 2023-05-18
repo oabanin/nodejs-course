@@ -16,7 +16,7 @@ const postAddProduct = async (req: any, res: any) => {
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
-    const product = new Product(title, price, description, imageUrl)
+    const product = new Product(title, price, description, imageUrl, undefined, req.user.id)
     const result = await product.save();
     return result;
 

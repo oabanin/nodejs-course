@@ -8,7 +8,7 @@ class Product {
     imageUrl: string;
     _id?: ObjectId;
 
-    constructor(title: string, price: string, description: string, imageUrl: string, id?: string) {
+    constructor(title: string, price: string, description: string, imageUrl: string, id?: string, userId?:string) {
         this.title = title;
         this.price = price;
         this.description = description;

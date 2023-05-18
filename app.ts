@@ -18,8 +18,12 @@ app.set('views', 'views');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use((req:any, res, next) => {
-    User.findById('6463416c9c0fdc9f42aaad11').then(user =>{  req.user = user; next();});
+app.use((req: any, res, next) => {
+    User.findById('6463416c9c0fdc9f42aaad11')
+        .then((user:any) => {
+            req.user = new User(user.name, user.email, user.cart, user?._id);
+            next();
+        });
 })
 
 
