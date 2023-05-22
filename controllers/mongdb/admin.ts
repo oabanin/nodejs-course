@@ -16,9 +16,9 @@ const postAddProduct = async (req: any, res: any) => {
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
-    const product = new Product({title, imageUrl, price, description})
-    await product.save();
-    res.redirect('/products');
+    const product = new Product(title, price, description, imageUrl, undefined, req.user.id)
+    const result = await product.save();
+    return result;
 
 };
 
@@ -45,34 +45,34 @@ const getEditProduct = (req: any, res: any) => {
 
 const postEditProduct = async (req: any, res: any) => {
 
-    // const prodId = req.body.productId;
-    // const updatedTitle = req.body.title;
-    // const updatedPrice = req.body.price;
-    // const updatedImageUrl = req.body.imageUrl;
-    // const updatedDesc = req.body.description;
-    //
-    // const product = await Product.findById(prodId);
-    // const newProduct = new Product(updatedTitle, updatedPrice, updatedDesc, updatedImageUrl, prodId);
-    // await newProduct.save()
-    // res.redirect('/admin/products');
+    const prodId = req.body.productId;
+    const updatedTitle = req.body.title;
+    const updatedPrice = req.body.price;
+    const updatedImageUrl = req.body.imageUrl;
+    const updatedDesc = req.body.description;
+
+    const product = await Product.findById(prodId);
+    const newProduct = new Product(updatedTitle, updatedPrice,updatedDesc,updatedImageUrl ,prodId);
+    await newProduct.save()
+    res.redirect('/admin/products');
 };
 //
 const getProducts = (req: any, res: any) => {
-    // Product.fetchAll().then((products: any) => {
-    //     res.render('admin/products', {
-    //         prods: products,
-    //         pageTitle: 'Admin Products',
-    //         path: '/admin/products'
-    //     });
-    // }).catch(console.log)
+    Product.fetchAll().then((products: any) => {
+        res.render('admin/products', {
+            prods: products,
+            pageTitle: 'Admin Products',
+            path: '/admin/products'
+        });
+    }).catch(console.log)
 
 
 };
 
 const postDeleteProduct = async (req: any, res: any) => {
-    // const prodId = req.body.productId;
-    // const product = await Product.deleteById(prodId);
-    // res.redirect('/admin/products');
+    const prodId = req.body.productId;
+    const product = await Product.deleteById(prodId);
+    res.redirect('/admin/products');
 };
 
 export {getProducts, getAddProduct, postAddProduct, postDeleteProduct, postEditProduct, getEditProduct}

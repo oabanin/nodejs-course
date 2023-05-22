@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import {rootDir} from "../../util/path";
-import {getAddProduct, postAddProduct} from "../../controllers/oldFile/old_shop";
+import {getAddProduct, postAddProduct} from "../../controllers/file/old_shop";
 
 const routerAdmin = express.Router();
 

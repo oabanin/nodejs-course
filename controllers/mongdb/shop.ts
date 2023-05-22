@@ -1,7 +1,7 @@
 import {Product} from "../models/product";
 
 const getProducts = (req: any, res: any) => {
-    Product.find().then(products => {
+    Product.fetchAll().then(products => {
         res.render('shop/index', {
             prods: products,
             pageTitle: 'Shop',
@@ -20,7 +20,7 @@ const getProduct = async (req: any, res: any) => {
     });
 }
 const getIndex = (req: any, res: any) => {
-    Product.find().then(products => {
+    Product.fetchAll().then(products => {
         res.render('shop/index', {
             prods: products,
             pageTitle: 'Shop',

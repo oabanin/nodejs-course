@@ -1,4 +1,4 @@
-import {getDb} from "../util/database";
+import {getDb} from "../../util/database";
 import {ObjectId} from "mongodb";
 
 class User {

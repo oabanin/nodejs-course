@@ -7,12 +7,12 @@ import {get404} from "./controllers/error";
 import {router as shopRoutes} from "./routes/shop";
 
 import {router as adminRoutes} from "./routes/admin"
-import {Product} from "./models/product";
-import {User} from "./models/user";
+import {Product} from "./models/mongodb/product";
+import {User} from "./models/mongodb/user";
 import {Cart} from "./models/cart";
 import {CartItem} from "./models/cart-item";
-import {OrderItem} from "./models/order-item";
-import {Order} from "./models/order";
+import {OrderItem} from "./models/mongodb/order-item";
+import {Order} from "./models/mongodb/order";
 
 const app = express();
 
