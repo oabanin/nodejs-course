@@ -1,13 +1,18 @@
 import {Product} from "../models/product";
 
 const getProducts = (req: any, res: any) => {
-    Product.find().then(products => {
-        res.render('shop/index', {
-            prods: products,
-            pageTitle: 'Shop',
-            path: '/'
+    Product.find()
+        .then(products => {
+            // console.log(products);
+            res.render('shop/product-list', {
+                prods: products,
+                pageTitle: 'All Products',
+                path: '/products'
+            });
+        })
+        .catch(err => {
+            console.log(err);
         });
-    }).catch(console.log)
 };
 
 const getProduct = async (req: any, res: any) => {
@@ -30,12 +35,17 @@ const getIndex = (req: any, res: any) => {
 };
 
 const getCart = async (req: any, res: any) => {
-    const products = await req.user.getCart();
-    res.render('shop/cart', {
-        path: '/cart',
-        pageTitle: 'Your Cart',
-        products
-    });
+    req.user
+        .populate('cart.items.productId')
+        .then((user:any) => {
+            const products = user.cart.items;
+            res.render('shop/cart', {
+                path: '/cart',
+                pageTitle: 'Your Cart',
+                products: products
+            });
+        })
+        .catch((err:any) => console.log(err));
 
 };
 
@@ -47,7 +57,7 @@ const postCart = async (req: any, res: any) => {
         })
         .then(result => {
             res.redirect('/cart');
-        });
+        }).catch((e)=>console.log(e))
 };
 
 const postCartDeleteProduct = async (req: any, res: any) => {
