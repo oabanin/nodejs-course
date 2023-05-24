@@ -63,11 +63,11 @@ const postCart = async (req: any, res: any) => {
 const postCartDeleteProduct = async (req: any, res: any) => {
     const prodId = req.body.productId;
     req.user
-        .deleteItemFromCart(prodId)
-        .then((result: any) => {
+        .removeFromCart(prodId)
+        .then((result:any) => {
             res.redirect('/cart');
         })
-        .catch((err: any) => console.log(err));
+        .catch(console.log);
 };
 
 const postOrder = async (req: any, res: any) => {
