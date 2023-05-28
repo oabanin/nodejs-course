@@ -1,4 +1,5 @@
 import {Product} from "../models/product";
+import {Order} from "../models/order";
 
 const getProducts = (req: any, res: any) => {
     Product.find()
@@ -37,7 +38,7 @@ const getIndex = (req: any, res: any) => {
 const getCart = async (req: any, res: any) => {
     req.user
         .populate('cart.items.productId')
-        .then((user:any) => {
+        .then((user: any) => {
             const products = user.cart.items;
             res.render('shop/cart', {
                 path: '/cart',
@@ -45,7 +46,7 @@ const getCart = async (req: any, res: any) => {
                 products: products
             });
         })
-        .catch((err:any) => console.log(err));
+        .catch((err: any) => console.log(err));
 
 };
 
@@ -57,40 +58,46 @@ const postCart = async (req: any, res: any) => {
         })
         .then(result => {
             res.redirect('/cart');
-        }).catch((e)=>console.log(e))
+        }).catch((e) => console.log(e))
 };
 
 const postCartDeleteProduct = async (req: any, res: any) => {
     const prodId = req.body.productId;
     req.user
         .removeFromCart(prodId)
-        .then((result:any) => {
+        .then((result: any) => {
             res.redirect('/cart');
         })
         .catch(console.log);
 };
 
 const postOrder = async (req: any, res: any) => {
-    let fetchedCart;
-    req.user
-        .addOrder()
-        .then((result: any) => {
-            res.redirect('/orders');
-        })
-        .catch((err: any) => console.log(err));
+
+    const user = await req.user.populate('cart.items.productId');
+    const products = user.cart.items.map((i: any) => ({quantity: i.quantity, product: {...i.productId._doc}}));
+    const order = new Order({
+        user: {
+            name: req.user.name,
+            userId: req.user,
+        },
+        products
+    });
+
+    await order.save();
+    await req.user.clearCart();
+
+    res.redirect('/orders');
+
 };
 
-const getOrders = (req: any, res: any) => {
-    req.user
-        .getOrders()
-        .then((orders:any) => {
-            res.render('shop/orders', {
-                path: '/orders',
-                pageTitle: 'Your Orders',
-                orders: orders
-            });
-        })
-        .catch((err:any) => console.log(err));
+const getOrders = async (req: any, res: any) => {
+    const orders = await Order.find({"user.userId": req.user._id})
+    res.render('shop/orders', {
+        path: '/orders',
+        pageTitle: 'Your Orders',
+        orders
+    });
+
 };
 
 const getCheckout = (req: any, res: any) => {
