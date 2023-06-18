@@ -11,12 +11,12 @@ const stripe = new Stripe(process.env.STRIPE_BACKEND_KEY ||'', { apiVersion: '20
 
 const ITEMS_PER_PAGE = 1;
 
-const getProducts = async (req: any, res: any) => {
+const getProducts = async (req: any, res: any, next:any) => {
     const page = +req.query.page || 1;
 
     const totalItems = await Product.find().countDocuments()
 
-
+    if(!req?.user?._id) return next()
     Product.find({userId: req.user._id})
         .find()
         .skip((page - 1) * ITEMS_PER_PAGE)
