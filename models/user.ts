@@ -4,14 +4,20 @@ import {getDb} from "../util/database";
 
 
 const userSchema = new Schema({
-    name: {
-        type: String,
-        required: true
-    },
+    // name: {
+    //     type: String,
+    //     required: true
+    // },
     email: {
         type: String,
         required: true
     },
+    password: {
+        type: String,
+        required: true
+    },
+    resetToken: String,
+    resetTokenExpiration:Number,
     cart: {
         items: [
             {
@@ -23,8 +29,8 @@ const userSchema = new Schema({
     }
 });
 
-userSchema.methods.addToCart = function(product:any) {
-    const cartProductIndex = this.cart.items.findIndex((cp:any) => {
+userSchema.methods.addToCart = function (product: any) {
+    const cartProductIndex = this.cart.items.findIndex((cp: any) => {
         return cp.productId.toString() === product._id.toString();
     });
     let newQuantity = 1;
@@ -46,16 +52,16 @@ userSchema.methods.addToCart = function(product:any) {
     return this.save();
 };
 
-userSchema.methods.removeFromCart = function(productId:string) {
-    const updatedCartItems = this.cart.items.filter((item:any) => {
+userSchema.methods.removeFromCart = function (productId: string) {
+    const updatedCartItems = this.cart.items.filter((item: any) => {
         return item.productId.toString() !== productId.toString();
     });
     this.cart.items = updatedCartItems;
     return this.save();
 };
 
-userSchema.methods.clearCart = function() {
-    this.cart = { items: [] };
+userSchema.methods.clearCart = function () {
+    this.cart = {items: []};
     return this.save();
 };
 const User = model('User', userSchema);
