@@ -1,4 +1,4 @@
-import {_old_product} from "../../models/ownmodel/_old_product";
+import {_old_product} from "../../../models/old/ownmodel/_old_product";
 import {Request, Response} from "express";
 
 const getAddProduct = (req: Request, res: Response) => {

@@ -1,5 +1,5 @@
 import {Sequelize} from "sequelize"
-import {Product} from "../../models/mongodb/product";
+import {Product} from "../../models/old/mongodb/product";
 
 const sequelize = new Sequelize('nodejs-complete', 'root', '12345678', {
     dialect: 'mysql',
