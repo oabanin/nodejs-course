@@ -72,6 +72,7 @@ app.use(async (req: any, res, next) => {
         req.user = user
         return next();
     } catch (e) {
+        //throwing error does not work here
         next(new Error(e as string))
     }
 })
