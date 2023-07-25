@@ -13,7 +13,8 @@ import {router as shopRoutes} from "./routes/shop";
 import {router as adminRoutes} from "./routes/admin"
 import {router as authRoutes} from "./routes/user";
 import 'dotenv/config'
-
+import helmet from "helmet";
+import compression from "compression";
 export const MONGODB_URI = process.env.MONGODB_URI|| ''
 //NEED to add tight
 
@@ -41,7 +42,6 @@ const fileFilter = (req: any, file: Express.Multer.File, callback: multer.FileFi
     } else {
         callback(null, false)
     }
-
 }
 
 app.use(bodyParser.urlencoded({extended: false}));
@@ -85,7 +85,8 @@ app.use(async (req: any, res, next) => {
 //             next();
 //         });
 // })
-
+app.use(helmet());
+app.use(compression());
 
 app.use((req, res, next) => {
     res.locals.isAuthenticated = req.session.isLoggedIn;
