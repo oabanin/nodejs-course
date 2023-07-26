@@ -6,8 +6,10 @@ import * as bodyParser from "body-parser";
 import {get404, get500} from "./controllers/error";
 import {User} from "./models/user";
 import session from "express-session";
+import {createWriteStream, readFileSync} from "fs";
 import connectMongodbSession from "connect-mongodb-session";
 import csrf from "csurf";
+import morgan from "morgan"
 import flash from "connect-flash"
 import {router as shopRoutes} from "./routes/shop";
 import {router as adminRoutes} from "./routes/admin"
@@ -15,18 +17,31 @@ import {router as authRoutes} from "./routes/user";
 import 'dotenv/config'
 import helmet from "helmet";
 import compression from "compression";
-export const MONGODB_URI = process.env.MONGODB_URI|| ''
+import * as https from "https";
+
+export const MONGODB_URI = process.env.MONGODB_URI || ''
 //NEED to add tight
 
 const MongoDBStore = connectMongodbSession(session);
 const store = new MongoDBStore({uri: MONGODB_URI, collection: "sessions"});
 
-const csrfProtection = csrf()
+const csrfProtection = csrf();
+
+const privateKey = readFileSync(path.join(__dirname, '..', 'server.key'));
+const certificate = readFileSync(path.join(__dirname, '..', 'server.cert'));
+
 const app = express();
+
+const accessLogStream = createWriteStream(
+    path.join(__dirname, 'access.log'),
+    {flags: 'a'}
+);
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
-
+app.use(helmet());
+app.use(compression());
+app.use(morgan('combined', {stream: accessLogStream}))
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
         callback(null, 'images')
@@ -85,8 +100,7 @@ app.use(async (req: any, res, next) => {
 //             next();
 //         });
 // })
-app.use(helmet());
-app.use(compression());
+
 
 app.use((req, res, next) => {
     res.locals.isAuthenticated = req.session.isLoggedIn;
@@ -103,6 +117,7 @@ app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 
+
 app.get('/500', get500)
 
 app.use(get404);
@@ -112,7 +127,7 @@ mongoose.connect(MONGODB_URI)
     .then((result) => {
         // const user = new User({name: 'test', email: "test", cart: {items: []}});
         // user.save();
-        app.listen(3000);
+        https.createServer({key: privateKey, cert: certificate}, app).listen(3000);
     })
     .catch(console.log)
 
