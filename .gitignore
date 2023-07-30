@@ -2,3 +2,5 @@
 /.idea
 .env
 dist
+server.cert
+server.key

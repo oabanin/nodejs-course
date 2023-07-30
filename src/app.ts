@@ -125,9 +125,8 @@ app.use(get404);
 
 mongoose.connect(MONGODB_URI)
     .then((result) => {
-        // const user = new User({name: 'test', email: "test", cart: {items: []}});
-        // user.save();
-        https.createServer({key: privateKey, cert: certificate}, app).listen(3000);
+        // https.createServer({key: privateKey, cert: certificate}, app).listen(3000);
+        app.listen(process.env.PORT || 3000)
     })
     .catch(console.log)
 
